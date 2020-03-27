@@ -36,17 +36,13 @@ class ValueIterationAgent(ValueEstimationAgent):
     self.iterations = iterations
     self.values = util.Counter() # A Counter is a dict with default 0
 
-    "*** YOUR CODE HERE ***"
-    values_prime = util.Counter() # A Counter is a dict with default 0
     states = mdp.getStates()
     for i in range(0, iterations):
-        print "Iteration: ", i
-        values_prime = self.values
+        values_prime = self.values.copy()
         for state in states:
             if state != 'TERMINAL_STATE':
                 actions = mdp.getPossibleActions(state)
                 maxQ = max([self.getQValue(state,action) for action in actions])
-                print maxQ
                 values_prime[state] = maxQ
         self.values = values_prime
 
