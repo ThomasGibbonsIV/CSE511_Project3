@@ -155,22 +155,28 @@ class ApproximateQAgent(PacmanQAgent):
     PacmanQAgent.__init__(self, **args)
 
     # You might want to initialize weights here.
-    "*** YOUR CODE HERE ***"
+    # Use self.Q as weights since that will not be used from parent class.
 
   def getQValue(self, state, action):
     """
       Should return Q(state,action) = w * featureVector
       where * is the dotProduct operator
     """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    features = self.featExtractor.getFeatures(state,action)
+    return sum([self.Q[feature] * features[feature] for feature in features])
 
   def update(self, state, action, nextState, reward):
     """
        Should update your weights based on transition
     """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    newValue = reward + self.discount * self.getValue(nextState)
+    oldValue = self.getQValue(state, action)
+
+    features = self.featExtractor.getFeatures(state, action)
+    for feature in features:
+        self.Q[feature] = self.Q[feature] + self.alpha * (newValue - oldValue) * features[feature]
 
   def final(self, state):
     "Called at the end of each game."
@@ -180,5 +186,6 @@ class ApproximateQAgent(PacmanQAgent):
     # did we finish training?
     if self.episodesSoFar == self.numTraining:
       # you might want to print your weights here for debugging
-      "*** YOUR CODE HERE ***"
+      # I never find the right place for debug prints, so thank you for this.
+      #print self.Q
       pass
